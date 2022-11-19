@@ -1,0 +1,6 @@
+# Git to autodetect text files and normalise their line endings to LF when they are checked into your repository.
+* text=auto eol=lf
+
+# These files are text and should be normalized
+.gitattributes text
+.gitignore text

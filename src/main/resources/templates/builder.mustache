@@ -1,0 +1,49 @@
+{{^defaultPackage}}
+package {{packageName}};
+
+{{/defaultPackage}}
+{{#imports}}
+import {{fqcn}};
+{{/imports}}
+import hestalon.fixturebuilder.*;
+
+import javax.annotation.processing.Generated;
+
+@Generated("{{processorClassName}}")
+public final class {{builderClassName}} implements {{builderInterfaceName}} {
+
+{{#variables}}
+    private {{variableClassName}} {{camelCaseVariable}}{{^primitive}} = {{{defaultValue}}}{{/primitive}};
+{{/variables}}
+
+    @Override
+    public {{instanceClass}} build() {
+{{#allArgsConstructor}}
+        var instance = new {{instanceClass}}(
+    {{#variables}}
+            {{camelCaseVariable}}{{^last}},{{/last}}
+    {{/variables}}
+        );
+{{/allArgsConstructor}}
+{{^allArgsConstructor}}
+        var instance = new {{instanceClass}}();
+    {{#variables}}
+        instance.set{{pascalCaseVariable}}({{camelCaseVariable}});
+    {{/variables}}
+{{/allArgsConstructor}}
+        return instance;
+    }
+
+    public {{builderClassName}} useConfig(FixtureBuilderConfig<{{builderClassName}}> config) {
+        config.configure(this);
+        return this;
+    }
+{{#variables}}
+
+    public {{builderClassName}} with{{pascalCaseVariable}}({{variableClassName}} {{camelCaseVariable}}) {
+        this.{{camelCaseVariable}} = {{camelCaseVariable}};
+        return this;
+    }
+{{/variables}}
+
+}
